@@ -17,7 +17,7 @@ object Game {
 
     implicit val config = Config(" ", 6, 6, 4)
 
-    println(s"The Battleship game has been started on ${config.xLengthOfCoreBoard} x ${config.yLengthOfCoreBoard} grid \n")
+    println(s"The Battleship game has been started on ${config.xLengthOfCoreBoard} x ${config.yLengthOfCoreBoard} grid")
 
     val humanShips = 1.to(config.numberOfShips).reverse
       .foldLeft(Seq[Ship]())((ships, currentShipSize) => getUserInputWhileIsImproperForPlacingAShip(ships, currentShipSize))
@@ -46,19 +46,19 @@ object Game {
     gameState.humanPlayerState.enemyPlayerBoard.drawBoard
 
     if(gameState.aiPlayerState.numberOfShipsDestroyedByPlayer == config.numberOfShips) {
-      println("You lost ! \n")
+      println("You lost !")
       gameState
     } else if(gameState.humanPlayerState.numberOfShipsDestroyedByPlayer == config.numberOfShips) {
-      println("You won ! \n")
+      println("You won !")
       gameState
     } else if(isHumanPlayerTurn){
-        println("It's your turn - provide point coordinates \n")
+        println("It's your turn - provide point coordinates")
         val attackCoordinate = getUserInputWhileIsImproperForAttackCoordinate
         val (newPlayerState, isHitOrWreck) = HumanPlayer.attack(attackCoordinate, gameState.humanPlayerState)
         val newGameState = GameState(newPlayerState, gameState.aiPlayerState)
         loopUntilEnd(newGameState, isHitOrWreck)
       } else {
-        println("Computer's turn \n")
+        println("Computer's turn")
         val (newPlayerState, isHitOrWreck) = AiPlayer.attack(gameState.aiPlayerState)
         val newGameState = GameState(gameState.humanPlayerState, newPlayerState)
         loopUntilEnd(newGameState, !isHitOrWreck)

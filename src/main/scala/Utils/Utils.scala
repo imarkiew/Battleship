@@ -81,7 +81,7 @@ object Utils {
 
     val userInputParser = parseUserInputToAttackCoordinate(_: String)
 
-    println("Type in coordinate for attack - \"x y\"")
+    println("Type in coordinate for attack - type in \"x y\"")
 
     @tailrec
     def getUserInputWhileIsImproperForAttackCoordinateHelper: Coordinate = {
@@ -89,10 +89,10 @@ object Utils {
       userInputParser(StdIn.readLine) match {
         case Success(attackCoordinate: Coordinate) => attackCoordinate
         case Failure(exception: NotValidUserInputForAttackCoordinate.type) =>
-          println(exception.message + "\n")
+          println(exception.message)
           getUserInputWhileIsImproperForAttackCoordinateHelper
         case _ =>
-          println("Unknown exception ! Try again \n")
+          println("Unknown exception ! Try again")
           getUserInputWhileIsImproperForAttackCoordinateHelper
       }
 
@@ -103,7 +103,7 @@ object Utils {
 
   def getUserInputWhileIsImproperForPlacingAShip(ships: Seq[Ship], currentShipSize: Int)(implicit config: Config): Seq[Ship] = {
 
-    println(s"""Put $currentShipSize fields ship on your board - type in \"xStartCoordinate yStartCoordinate direction\" \n""")
+    println(s"""Put $currentShipSize fields ship on your board - type in \"xStart yStart direction\", where direction is one of {north, east, south, west}""")
 
     val userInputParser = parseUserInputToShipPosition(_: String, _: Int)
 
@@ -115,14 +115,14 @@ object Utils {
           if(isShipPlacedProperlyAmongOtherShips(ship, ships)) {
             ships :+ ship
           } else {
-            println("Ship.Ship is not properly placed among other ships ! Try again \n")
+            println("Ship is not properly placed among other ships ! Try again")
             getUserInputWhileIsImproperForPlacingShipsHelper
           }
         case Failure(exception: NotValidUserInputForShipPlacement.type) =>
-          println(exception.message + "\n")
+          println(exception.message)
           getUserInputWhileIsImproperForPlacingShipsHelper
         case _ =>
-          println("Unknown exception ! Try again \n")
+          println("Unknown exception ! Try again")
           getUserInputWhileIsImproperForPlacingShipsHelper
       }
     }
