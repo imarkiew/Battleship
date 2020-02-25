@@ -21,10 +21,7 @@ object Game {
 
     val humanShips = 1.to(config.numberOfShips).reverse
       .foldLeft(Seq[Ship]())((ships, currentShipSize) => getUserInputWhileIsImproperForPlacingAShip(ships, currentShipSize))
-
     val humanBoard = Board(humanShips, false)
-
-    println("-------------------------------------------------------------------")
 
     val aiShips = placeShipsRandomly
     val aiBoard = Board(aiShips, true)
@@ -39,9 +36,13 @@ object Game {
   private def loopUntilEnd(gameState: GameState, isHumanPlayerTurn: Boolean)(implicit config: Config): GameState = {
 
     println(s"You have destroyed ${gameState.humanPlayerState.numberOfShipsDestroyedByPlayer} out of ${config.numberOfShips} ships")
+    println("Your map")
     gameState.aiPlayerState.enemyPlayerBoard.drawBoard
 
+    println("\n")
+
     println(s"Computer has destroyed ${gameState.aiPlayerState.numberOfShipsDestroyedByPlayer} out of ${config.numberOfShips} ships")
+    println("AI's map")
     gameState.humanPlayerState.enemyPlayerBoard.drawBoard
 
     if(gameState.aiPlayerState.numberOfShipsDestroyedByPlayer == config.numberOfShips) {
