@@ -14,13 +14,6 @@ class Player {
 
     val isAnyShipShot = playerState.enemyPlayerShips.exists(_.isShot(attackCoordinate))
 
-    println("%%%%%%%%%%%%%%%%%%%%")
-    println(playerState.enemyPlayerShips)
-    println(attackCoordinate)
-    //    println(playerState)
-    println(isAnyShipShot)
-    println("%%%%%%%%%%%%%%%%%%%%")
-
     if(isAnyShipShot){
       val updatedShips = playerState.enemyPlayerShips.map {ship =>
         val coordinates = ship.shipCoordinates.map{
@@ -45,6 +38,8 @@ class Player {
           (PlayerState(newBoard, updatedShips, playerState.numberOfShipsDestroyedByPlayer), true)
       }
 
+    } else if(playerState.enemyPlayerShips.exists(_.shipCoordinates.keySet.exists(_ == attackCoordinate))) {
+      (playerState, false)
     } else {
       val newBoard = Board(playerState.enemyPlayerBoard, Map(attackCoordinate -> MissCell))
       (PlayerState(newBoard, playerState.enemyPlayerShips, playerState.numberOfShipsDestroyedByPlayer), false)
