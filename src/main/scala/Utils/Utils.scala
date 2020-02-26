@@ -103,7 +103,11 @@ object Utils {
 
   def getUserInputWhileIsImproperForPlacingAShip(ships: Seq[Ship], currentShipSize: Int)(implicit config: Config): Seq[Ship] = {
 
-    println(s"""Put $currentShipSize fields ship on your board - type in \"xStart yStart direction\", where direction is one of {north, east, south, west}""")
+    println(
+      s"""Put $currentShipSize fields ship on your board - type in \"xStart yStart direction\", where
+          xStart is between 0 and ${config.xLengthOfCoreBoard - 1},
+          yStart is between 0 and ${config.yLengthOfCoreBoard - 1},
+          direction is one of {north, east, south, west}""")
 
     val userInputParser = parseUserInputToShipPosition(_: String, _: Int)
 
