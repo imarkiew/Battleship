@@ -25,6 +25,12 @@ case class Board(grid: gridType, isAiBoard: Boolean)(implicit config: Config) {
       println(rowToString)
     }
   }
+
+  def findCellByCoordinate(coordinate: Coordinate): Option[Cell] =
+    grid
+      .map(_.find(_.coordinates == coordinate))
+      .filter(_.isDefined)
+      .head
 }
 
 

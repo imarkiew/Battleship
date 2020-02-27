@@ -5,12 +5,12 @@ import Board.Board
 import Config.Config
 import Coordinate.Coordinate
 import Ship.Ship
-import State.PlayerState
+import State.UniversalPlayerState
 
 
 class Player {
 
-  def attack(attackCoordinate: Coordinate, playerState: PlayerState)(implicit config: Config): (PlayerState, Boolean) = {
+  def attack(attackCoordinate: Coordinate, playerState: UniversalPlayerState)(implicit config: Config): (UniversalPlayerState, Boolean) = {
 
     val isAnyShipShot = playerState.enemyPlayerShips.exists(_.isShot(attackCoordinate))
 
@@ -28,21 +28,20 @@ class Player {
         Ship(coordinates)
       }
 
-      println(updatedShips)
       updatedShips.find(_.shipCoordinates.getOrElse(attackCoordinate, false)) match {
         case Some(ship) if ship.isSunk =>
           val newBoard = Board(playerState.enemyPlayerBoard, ship.shipCoordinates.keySet.map((_, WreckCell)).toMap)
-          (PlayerState(newBoard, updatedShips, playerState.numberOfShipsDestroyedByPlayer + 1), true)
+          (UniversalPlayerState(newBoard, updatedShips, playerState.numberOfShipsDestroyedByPlayer + 1), true)
         case _ =>
           val newBoard = Board(playerState.enemyPlayerBoard, Map(attackCoordinate -> HitCell))
-          (PlayerState(newBoard, updatedShips, playerState.numberOfShipsDestroyedByPlayer), true)
+          (UniversalPlayerState(newBoard, updatedShips, playerState.numberOfShipsDestroyedByPlayer), true)
       }
 
     } else if(playerState.enemyPlayerShips.exists(_.shipCoordinates.keySet.exists(_ == attackCoordinate))) {
       (playerState, false)
     } else {
       val newBoard = Board(playerState.enemyPlayerBoard, Map(attackCoordinate -> MissCell))
-      (PlayerState(newBoard, playerState.enemyPlayerShips, playerState.numberOfShipsDestroyedByPlayer), false)
+      (UniversalPlayerState(newBoard, playerState.enemyPlayerShips, playerState.numberOfShipsDestroyedByPlayer), false)
     }
 
   }

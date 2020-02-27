@@ -2,13 +2,14 @@ package GameLogic
 
 import Board.Board
 import Config.Config
-import GameLogic.Player.AiPlayer.placeShipsRandomly
-import GameLogic.Player.{AiPlayer, HumanPlayer}
+import GameLogic.Player.AIPlayer.placeShipsRandomly
+import GameLogic.Player.{AIPlayer, HumanPlayer}
 import Ship.Ship
-import State.{GameState, PlayerState}
+import State.{GameState, UniversalPlayerState, AIPlayerState}
+
 import scala.annotation.tailrec
 import scala.util.Random.nextBoolean
-import Utils.Utils.{getUserInputWhileIsImproperForPlacingAShip, getUserInputWhileIsImproperForAttackCoordinate}
+import Utils.Utils.{getUserInputWhileIsImproperForAttackCoordinate, getUserInputWhileIsImproperForPlacingAShip}
 
 
 object Game {
@@ -26,7 +27,7 @@ object Game {
     val aiShips = placeShipsRandomly
     val aiBoard = Board(aiShips, true)
 
-    val initialGameState = GameState(PlayerState(aiBoard, aiShips, 0), PlayerState(humanBoard, humanShips, 0))
+    val initialGameState = GameState(UniversalPlayerState(aiBoard, aiShips, 0), AIPlayerState(humanBoard, humanShips, Seq(), 0))
     val isHumanTurn = nextBoolean
 
     loopUntilEnd(initialGameState, isHumanTurn)
@@ -59,7 +60,7 @@ object Game {
         loopUntilEnd(newGameState, isHitOrWreck)
       } else {
         println("Computer's turn")
-        val (newPlayerState, isHitOrWreck) = AiPlayer.attack(gameState.aiPlayerState)
+        val (newPlayerState, isHitOrWreck) = AIPlayer.attack(gameState.aiPlayerState)
         val newGameState = GameState(gameState.humanPlayerState, newPlayerState)
         loopUntilEnd(newGameState, !isHitOrWreck)
       }
